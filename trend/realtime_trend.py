@@ -14,20 +14,18 @@ from wordcloud import WordCloud
 from time import strftime
 import json
 
-path = r".\src\main\resources\static\uploads\trend"
-
-if not os.path.isdir(path):
-    os.makedirs(path, exist_ok=True)
+path= sys.argv[2]
 
 # 원격 컨텐츠 로드 
-url = sys.argv[2] if len(sys.argv) > 2 else "https://news.naver.com/"
+url = sys.argv[1] if len(sys.argv) > 2 else "https://news.naver.com/"
+
 
 html = requests.get(url).text
 html = requests.get(url).text
 soup = bs(html, 'html.parser')
 body = soup.select_one("body")
 text = body.get_text().strip().replace("\n", " ")
-stopwords = ['본문', '바로가기', 'NAVER', '검색', '이슈', '닫기', '구독']
+stopwords = ['본문', '바로가기', 'NAVER', '검색', '이슈', '닫기', '구독','보기','더','뉴스']
 
 # 명사, 형용사, 동사의 단어로 형태소 분리
 okt = Okt()  # 이제 에러 안 날 거예요!

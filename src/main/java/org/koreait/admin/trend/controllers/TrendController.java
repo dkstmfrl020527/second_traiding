@@ -5,6 +5,7 @@ import org.koreait.admin.global.controllers.CommonController;
 import lombok.RequiredArgsConstructor;
 import org.koreait.trend.entities.NewsTrend;
 import org.koreait.trend.entities.Trend;
+import org.koreait.trend.service.NewsSaveService;
 import org.koreait.trend.service.RealTimeAnalyzeService;
 import org.koreait.trend.service.TrendInfoService;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ public class TrendController extends CommonController {
     private final TrendInfoService infoService;
     private final RealTimeAnalyzeService realTimeService;
     private ObjectMapper objectMapper;
+    private final NewsSaveService newsSaveService;
 
     @Override
     @ModelAttribute("mainCode")
@@ -36,8 +38,9 @@ public class TrendController extends CommonController {
     public String news(Model model) {
         commonProcess("news", model);
 
-        Trend item = infoService.getLatest("NEWS");
+        Trend item = infoService.getLatest("https://news.naver.com");
         model.addAttribute("item", item);
+        System.out.println(item);
 
         return "admin/trend/news";
     }
@@ -60,6 +63,7 @@ public class TrendController extends CommonController {
                     model.addAttribute("analyzedUrl", search.getSiteUrl());
                     model.addAttribute("success", true);
                     System.out.println("분석 성공: " + result.getImage());
+                    newsSaveService.DataSave(result,search.getSiteUrl());
                 } else {
                     model.addAttribute("error", "분석에 실패했습니다. 사이트 주소를 확인해주세요.");
                 }

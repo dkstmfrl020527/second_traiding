@@ -72,37 +72,4 @@ public class NewsTrendService {
         return null; // 실패시에는 null
     }
 
-
-    public void scheduledJob() {
-        NewsTrend item = process();
-        if (item == null) return;
-
-        // 고정 경로 사용
-        String wordCloud = "/C/uploads/trend/" + item.getImage();
-
-        try {
-            String keywords = om.writeValueAsString(item.getKeywords());
-            Trend data = new Trend();
-            data.setCategory("NEWS");
-            data.setWordCloud(wordCloud);
-            data.setKeywords(keywords);
-            repository.save(data);
-
-            System.out.println("트렌드 데이터 저장 완료: " + wordCloud);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @EventListener(ApplicationReadyEvent.class)
-    public void onStartup() {
-        try {
-            System.out.println("서버 시작 완료, 파이썬 실행...");
-            scheduledJob();
-        } catch (Exception e) {
-            System.err.println("파이썬 실행 에러: " + e.getMessage());
-            e.printStackTrace();
-            // 에러가 나도 애플리케이션은 계속 실행
-        }
-    }
 }

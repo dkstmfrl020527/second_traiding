@@ -25,6 +25,11 @@ public class Menus {
                 new Menu("etc", "기타", "/admin/trend/etc")
         ));
 
+        menus.put("product", List.of(
+                new Menu("list", "상품목록", "/admin/product"),
+                new Menu("register", "상품등록", "/admin/product/register")
+        ));
+
     }
 
     /**

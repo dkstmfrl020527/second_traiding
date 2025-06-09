@@ -18,16 +18,17 @@ import java.util.stream.Collectors;
 public class RealTimeAnalyzeService {
 
     private final ObjectMapper om;
+    private final PythonProperties properties;
+    private final FileProperties fileProperties;
 
     public NewsTrend analyze(String siteUrl) {
-        // 파이썬 실행 (SQL 저장하지 않음)
-        String pythonPath = "./trend/venv/Scripts/python.exe";
-        String scriptPath = "./trend/realtime_trend.py";  // 별도 스크립트
-        System.out.println("현재 작업 디렉토리: " + System.getProperty("user.dir"));
+        String pythonPath = properties.getBase()+"/python.exe";
+        String scriptPath = properties.getTrend()+"/realtime_trend.py";
+        String filepath=fileProperties.getPath();
 
         try {
             ProcessBuilder builder = new ProcessBuilder(
-                    pythonPath, scriptPath, siteUrl
+                    pythonPath, scriptPath, siteUrl, filepath
             );
             Process process = builder.start();
             System.out.println("분석중");
