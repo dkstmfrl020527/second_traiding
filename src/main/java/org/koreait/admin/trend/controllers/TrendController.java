@@ -3,6 +3,7 @@ package org.koreait.admin.trend.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.koreait.admin.global.controllers.CommonController;
 import lombok.RequiredArgsConstructor;
+import org.koreait.global.search.CommonSearch;
 import org.koreait.trend.entities.NewsTrend;
 import org.koreait.trend.entities.Trend;
 import org.koreait.trend.service.NewsSaveService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +48,11 @@ public class TrendController extends CommonController {
     }
 
     @GetMapping("/etc")
-    public String etc(@ModelAttribute TrendSearch search, Model model,ObjectMapper objectMapper) {
+    public String etc(@ModelAttribute TrendSearch search, Model model,ObjectMapper objectMapper, CommonSearch csearch, TrendInfoService trendInfoService) {
         commonProcess("etc", model);
+
+        csearch.setSDate(LocalDate.now());
+        csearch.setEDate(LocalDate.now().minusDays(7));
 
         // ⭐ 사용자가 URL을 입력했다면 실시간 분석
         if (search.getSiteUrl() != null && !search.getSiteUrl().trim().isEmpty()) {
@@ -55,6 +60,7 @@ public class TrendController extends CommonController {
                 System.out.println("실시간 분석 시작: " + search.getSiteUrl());
 
                 NewsTrend result = realTimeService.analyze(search.getSiteUrl());
+                System.out.println("result"+result);
 
                 if (result != null) {
                     String keywordsJson = objectMapper.writeValueAsString(result.getKeywords());
@@ -64,6 +70,12 @@ public class TrendController extends CommonController {
                     model.addAttribute("success", true);
                     System.out.println("분석 성공: " + result.getImage());
                     newsSaveService.DataSave(result,search.getSiteUrl());
+
+                    List<Trend> trends = trendInfoService.getList(search.getSiteUrl(),csearch );
+                    model.addAttribute("trends", trends);
+                    System.out.println(trends);
+
+
                 } else {
                     model.addAttribute("error", "분석에 실패했습니다. 사이트 주소를 확인해주세요.");
                 }

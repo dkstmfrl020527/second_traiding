@@ -28,4 +28,5 @@ public class Member extends BaseEntity {
 
     @Column("credentialChangedAt")
     private LocalDateTime credentialChangedAt; // 비밀번호 변경 일시
+
 }

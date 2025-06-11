@@ -5,15 +5,17 @@ import org.koreait.global.search.CommonSearch;
 import org.koreait.trend.entities.Trend;
 import org.koreait.trend.exceptions.TrendNotFoundException;
 import org.koreait.trend.repositories.TrendRepository;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Lazy
 @Service
 @RequiredArgsConstructor
+@EnableJdbcRepositories(basePackages = "org.koreait")
 public class TrendInfoService {
 
     private final TrendRepository repository;
@@ -47,7 +49,14 @@ public class TrendInfoService {
      * @return
      */
     public List<Trend> getList(String category, CommonSearch search) {
-
-        return null;
+        System.out.println("Repository: " + repository);
+        return repository.findByCategoryAndDateRange(
+                category,
+                search.getSDate(),
+                search.getEDate()
+        );
     }
+
+
+
 }

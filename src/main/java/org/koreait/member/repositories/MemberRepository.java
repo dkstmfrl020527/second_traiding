@@ -3,6 +3,7 @@ package org.koreait.member.repositories;
 
 import org.koreait.member.entities.Member;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 

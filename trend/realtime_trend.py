@@ -44,7 +44,7 @@ wc = WordCloud(font_path=r'.\trend\NanumGothic-ExtraBold.ttf',
                width=500, height=300)
 cloud = wc.generate_from_frequencies(dict(stat))
 filename = f"{strftime('%Y%m%d%H')}_news.jpg"
-cloud.to_file(f"{path}/{filename}")
+cloud.to_file(f"{path}{filename}")
 
 
 # ⭐ Java에서 받을 JSON 출력 (중요!)

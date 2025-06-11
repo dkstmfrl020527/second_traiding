@@ -9,7 +9,7 @@
 
 <section layout:fragment="content" th:object="${item}">
     <h1>오늘의 뉴스 트렌드</h1>
-    <img th:src="*{wordCloud}">
+    <img th:src="@{'/uploads/trend/'+*{wordCloud}}" alt="워드클라우드" style="max-width: 500px;">
 
     <div class="chart-wrap">
         <canvas id="myChart"></canvas>

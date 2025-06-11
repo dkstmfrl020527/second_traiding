@@ -24,7 +24,7 @@ public class RealTimeAnalyzeService {
     public NewsTrend analyze(String siteUrl) {
         String pythonPath = properties.getBase()+"/python.exe";
         String scriptPath = properties.getTrend()+"/realtime_trend.py";
-        String filepath=fileProperties.getPath();
+        String filepath=fileProperties.getUrl();
 
         try {
             ProcessBuilder builder = new ProcessBuilder(
@@ -32,6 +32,7 @@ public class RealTimeAnalyzeService {
             );
             Process process = builder.start();
             System.out.println("분석중");
+            System.out.println(pythonPath + scriptPath + siteUrl + filepath);
 
             if (process.waitFor() == 0) {
                 System.out.println("분석중2");
