@@ -1,7 +1,7 @@
 package org.koreait.global.configs;
 
-import org.koreait.member.services.*;
 import lombok.RequiredArgsConstructor;
+import org.koreait.member.services.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -58,7 +58,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(c -> {
             c.requestMatchers("/mypage/**").authenticated() // 회원 전용
                     .requestMatchers("/member/join", "/member/login").anonymous() // 비회원 전용
-                    .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                    //.requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                     .anyRequest().permitAll();
         });
 
@@ -67,6 +67,9 @@ public class SecurityConfig {
             c.accessDeniedHandler(new MemberAccessDeniedHandler()); // 인증 받은 회원이 권한이 없는 페이지에 접근한 경우
         });
         /* 인가 설정 E */
+
+        http.headers(c -> c.frameOptions(f -> f.sameOrigin()));
+
         return http.build();
     }
 

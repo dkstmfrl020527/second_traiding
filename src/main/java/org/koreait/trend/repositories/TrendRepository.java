@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,12 +16,7 @@ public interface TrendRepository extends ListCrudRepository<Trend, Long> {
     @Query("SELECT * FROM TREND WHERE category=:category ORDER BY createdAt DESC LIMIT 1")
     Optional<Trend> getLatest(@Param("category") String category);
 
-    @Query("SELECT * FROM TREND WHERE category = :category " +
-            "AND createdAt >= :startDateTime AND createdAt < :endDateTime " +  // ← startDateTime, endDateTime 사용
-            "ORDER BY createdAt DESC")
-    List<Trend> findByCategoryAndDateRange(
-            @Param("category") String category,
-            @Param("startDate") LocalDate startDate,    // ← startDate, endDate 파라미터
-            @Param("endDate") LocalDate endDate
-    );
+    @Query("SELECT * FROM TREND WHERE category=:category AND createdAt BETWEEN :sDate AND :eDate ORDER BY createdAt DESC LIMIT 1")
+    Optional<Trend> get(@Param("category") String category, @Param("sDate") LocalDateTime sDate, @Param("eDate") LocalDateTime eDate);
+    
 }

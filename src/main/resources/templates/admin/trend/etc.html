@@ -11,24 +11,49 @@
     <h1>실시간 사이트 분석</h1>
 
     <form method="get">
-        <input type="text" name="siteUrl" placeholder="https://news.naver.com">
+        <input type="text" name="siteUrl" placeholder="https://news.naver.com" value="https://news.naver.com">
         <button type="submit">분석하기</button>
     </form>
 
     <div th:if="${analysisResult}">
-        <h2>결과</h2>
-        <img th:src="@{'/uploads/trend/' + ${analysisResult.image}}" alt="워드클라우드" style="max-width: 500px;">
 
-        <div class="chart-wrap">
-            <canvas id="myChart"></canvas>
+        <!-- 📊 실시간 분석 결과 (파이 차트) -->
+        <div class="realtime-section" style="margin: 20px 0; padding: 20px; border: 2px solid #007bff; border-radius: 8px;">
+            <h2>📊 실시간 분석 결과</h2>
+
+            <img th:src="@{'/uploads/trend/' + ${analysisResult.image}}" alt="워드클라우드" style="max-width: 500px;">
+
+            <div class="chart-wrap" style="margin: 20px 0;">
+                <canvas id="myChart" width="400" height="200"></canvas>
+            </div>
         </div>
 
-        <script type="application/json" id="chart-data" th:utext="${keywordsJson}"></script>
+        <!-- 📈 일주일 트렌드 분석 (라인 차트) -->
+        <div th:if="${weeklyDatesJson != null and weeklyKeywordsJson != null}"
+             class="weekly-section" style="margin: 20px 0; padding: 20px; border: 2px solid #28a745; border-radius: 8px;">
 
+            <h2>📈 일주일간 트렌드 변화</h2>
+
+            <div class="chart-container" style="margin: 20px 0; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
+                <canvas id="weeklyTrendChart" width="800" height="400"></canvas>
+            </div>
+        </div>
+
+        <!-- 데이터가 없을 때 -->
+        <div th:unless="${weeklyDatesJson != null and weeklyKeywordsJson != null}"
+             class="no-weekly-data" style="margin: 20px 0; padding: 20px; background-color: #fff3cd; border-radius: 8px;">
+            <p>📈 일주일치 트렌드 데이터를 준비 중입니다...</p>
+            <p style="font-size: 0.9em; color: #856404;">실시간 분석 후 자동으로 생성됩니다.</p>
+        </div>
+
+        <!-- 숨겨진 데이터 (JavaScript용) -->
+        <script type="application/json" id="chart-data" th:utext="${keywordsJson}"></script>
+        <script type="application/json" id="weekly-dates" th:utext="${weeklyDatesJson}"></script>
+        <script type="application/json" id="weekly-keywords" th:utext="${weeklyKeywordsJson}"></script>
     </div>
 
     <div th:if="${error}">
-        <p th:text="${error}"></p>
+        <p th:text="${error}" style="color: red;"></p>
     </div>
 </section>
 </html>

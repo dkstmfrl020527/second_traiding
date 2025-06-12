@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -39,24 +40,7 @@ public class TrendInfoService {
      * @return
      */
     public Trend get(String category, LocalDate date) {
-
-        return null;
+        return repository.get(category, date.atStartOfDay(), LocalDateTime.of(date, LocalTime.of(23, 59, 59))).orElse(null);
     }
-
-    /**
-     * 특정 날짜 범위의 트렌트 데이터 조회
-     *
-     * @return
-     */
-    public List<Trend> getList(String category, CommonSearch search) {
-        System.out.println("Repository: " + repository);
-        return repository.findByCategoryAndDateRange(
-                category,
-                search.getSDate(),
-                search.getEDate()
-        );
-    }
-
-
 
 }
