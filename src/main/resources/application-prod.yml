@@ -1,0 +1,4 @@
+spring:
+  thymleaf:
+    cache: true
+    prefix: classpath:/templates/
